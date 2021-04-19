@@ -54,13 +54,18 @@ module Geoserver
             Faraday.new(url: config["url"]) do |conn|
               conn.adapter Faraday.default_adapter
               conn.basic_auth(config["user"], config["password"]) if config["user"]
-              end
+            end
+          elsif config["auth"]=='token'
+            Faraday.new(url: config["url"]) do |conn|
+              conn.adapter Faraday.default_adapter
+              conn.authorization :Token, config["token"]
+            end
           else
             # else setup jwt token
             Faraday.new(url: config["url"]) do |conn|
               conn.adapter Faraday.default_adapter
-              conn.authorization :Token, config["token"]
-              end
+              conn.authorization :Bearer, config["token"]
+            end
           end
         end
     end
