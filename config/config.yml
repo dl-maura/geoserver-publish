@@ -1,6 +1,8 @@
 geoserver:
-  auth: basic # options are basic, token, or bearer, basic will use geoserver creds, token uses a token auth method, bearer uses oauth2 bearer
+  auth: # options are basic, token, or bearer, basic will use geoserver creds, token uses a token auth method, bearer uses oauth2 bearer
   url: <%= ENV['GEOSERVER_URL'] || "http://localhost:8080/geoserver/rest" %>
   user: <%= ENV['GEOSERVER_USER'] || "admin" %>
   password: <%= ENV['GEOSERVER_PASSWORD'] || "geoserver" %>
-  token: <%= ENV['GEO_TOKEN'] %>
+  jwt_secret: # put your secret here
+  jwt_encode: # put your encoding here
+  jwt_user: # put the jwt user here

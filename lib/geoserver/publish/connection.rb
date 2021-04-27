@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'jwt'
 module Geoserver
   module Publish
     class Connection
@@ -48,6 +49,14 @@ module Geoserver
 
       private
 
+      def generate_jwt
+        payload = { user: config['jwt_user'].to_s }
+        token = JWT.encode(payload, config['jwt_secret'], config['jwt_encode'])
+        return token
+      end
+
+      private
+
         def faraday_connection
           #check config, if basic auth do this
           if config["auth"]=='basic'
@@ -55,6 +64,7 @@ module Geoserver
               conn.adapter Faraday.default_adapter
               conn.basic_auth(config["user"], config["password"]) if config["user"]
             end
+          # if using token 
           elsif config["auth"]=='token'
             Faraday.new(url: config["url"]) do |conn|
               conn.adapter Faraday.default_adapter
@@ -64,7 +74,7 @@ module Geoserver
             # else setup jwt token
             Faraday.new(url: config["url"]) do |conn|
               conn.adapter Faraday.default_adapter
-              conn.authorization :Bearer, config["token"]
+              conn.authorization :Bearer, generate_jwt
             end
           end
         end
