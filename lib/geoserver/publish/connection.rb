@@ -49,7 +49,9 @@ module Geoserver
 
       private
 
+      # for generating a jwt
       def generate_jwt
+        # can add other things to payload, just a basic example
         payload = { user: config['jwt_user'].to_s }
         token = JWT.encode(payload, config['jwt_secret'], config['jwt_encode'])
         return token
